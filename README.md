@@ -1,4 +1,4 @@
-# EPIIS – MCP-DOCS: Sistema de Inteligencia Documental (RAG)
+# MCP - EPIIS: Sistema de Inteligencia Documental (RAG)
 
 **EPIIS MCP-DOCS** es una plataforma de gestión y consulta documental potenciada por Inteligencia Artificial local. Permite transformar archivos estáticos (PDF, DOCX, TXT) en una base de conocimientos dinámica mediante un pipeline de **Generación Aumentada por Recuperación (RAG)**, garantizando la privacidad institucional al ejecutarse 100% en infraestructura propia.
 
