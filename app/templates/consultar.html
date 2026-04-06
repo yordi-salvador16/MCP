@@ -1,0 +1,431 @@
+{% extends "base.html" %}
+
+{% block title %}Consultar{% endblock %}
+{% block page_title %}Asistente Documental{% endblock %}
+{% block page_subtitle %}Consulta inteligente basada en el repositorio institucional{% endblock %}
+
+{% block content %}
+
+<style>
+    /* Estilos locales para la vista de consulta */
+    .context-banner {
+        background: var(--color-primary-light);
+        border: 1px solid var(--color-primary-border);
+        border-radius: var(--radius-lg);
+        padding: 0.75rem 1.25rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .context-label {
+        font-size: 0.75rem;
+        color: var(--color-primary);
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        margin-bottom: 0.15rem;
+        display: block;
+    }
+
+    /* Estilos del Chat */
+    .chat-bubble {
+        max-width: 85%;
+        padding: 1rem 1.25rem;
+        border-radius: var(--radius-lg);
+        position: relative;
+        line-height: 1.6;
+    }
+
+    .bubble-user {
+        align-self: flex-end;
+        background: var(--color-primary);
+        color: white;
+        border-bottom-right-radius: 4px;
+    }
+
+    .bubble-assistant {
+        align-self: flex-start;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        color: var(--color-text-main);
+        border-bottom-left-radius: 4px;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .bubble-meta {
+        font-size: 0.7rem;
+        margin-bottom: 0.4rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        opacity: 0.8;
+    }
+
+    .sources-inline {
+        margin-top: 1rem;
+        padding-top: 0.75rem;
+        border-top: 1px dotted var(--color-border);
+        font-size: 0.8rem;
+    }
+
+    .source-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        background: var(--color-bg);
+        padding: 0.2rem 0.5rem;
+        border-radius: var(--radius-pill);
+        border: 1px solid var(--color-border);
+        margin-right: 0.4rem;
+        margin-bottom: 0.4rem;
+    }
+
+    /* Layout principal del chat - dentro del flujo de base.html */
+    .chat-layout {
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100vh - 250px); /* Altura disponible menos headers */
+        position: relative;
+    }
+
+    .chat-messages {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        padding-bottom: 2rem;
+    }
+
+    .query-form-container {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        box-shadow: var(--shadow-sm);
+        padding: 0.6rem 0.75rem 0 0.75rem;
+        margin-top: auto;
+        position: sticky;
+        bottom: 0.5rem;
+        z-index: 1; /* Bajo para que el botón pase por encima */
+    }
+
+    .query-form-container form {
+        margin: 0; /* Resetear margen por defecto del form */
+    }
+
+    /* Botón flotante scroll-to-bottom - centrado horizontal fijo */
+    #scroll-bottom-btn {
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 220px; /* Un poco más arriba */
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: var(--color-primary);
+        color: white;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+        font-size: 1rem;
+        z-index: 9999;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+
+    #scroll-bottom-btn.show {
+        display: flex !important;
+    }
+
+    #scroll-bottom-btn:hover {
+        background: var(--color-primary-hover);
+        transform: translateX(-50%) translateY(-2px);
+    }
+
+    .chat-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .query-textarea {
+        width: 100%;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        padding: 0.6rem 0.75rem;
+        font-size: 0.95rem;
+        resize: none;
+        transition: all 0.2s;
+        outline: none;
+        margin-bottom: 0.3rem; /* Reducido */
+        min-height: 40px;
+        line-height: 1.4;
+    }
+
+    .query-textarea:focus {
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px var(--color-primary-light);
+    }
+
+    .btn-submit {
+        background: var(--color-primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius-md);
+        padding: 0.5rem 1rem;
+        font-weight: 500;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: background 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .btn-submit:hover { background: var(--color-primary-hover); }
+
+    .btn-clear {
+        background: transparent;
+        color: var(--color-text-muted);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        padding: 0.5rem 0.75rem;
+        font-weight: 500;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .btn-clear:hover { 
+        background: var(--color-bg);
+        color: var(--color-error);
+        border-color: var(--color-error-border);
+    }
+</style>
+
+<!-- ZONA DE CONTEXTO / ALCANCE -->
+<div class="context-banner">
+    <div>
+        <span class="context-label">Alcance Activo</span>
+        <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600; font-size: 0.95rem;">
+            <i class="bi {% if scope == 'doc' %}bi-file-earmark-text{% else %}bi-database-check{% endif %}" style="color: var(--color-primary);"></i>
+            {% if scope == 'doc' and doc_seleccionado %}
+                Documento: {{ doc_seleccionado }}
+            {% else %}
+                Todo el repositorio documental
+            {% endif %}
+        </div>
+    </div>
+    {% if scope == 'doc' %}
+    <a href="{{ url_for('consultar') }}" 
+       style="font-size: 0.75rem; color: var(--color-error); text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 0.3rem; padding: 0.4rem 0.75rem; background: var(--color-error-bg); border-radius: var(--radius-md); border: 1px solid var(--color-error);">
+        <i class="bi bi-x-lg"></i> Limpiar Filtro
+    </a>
+    {% endif %}
+</div>
+
+<!-- CONTENEDOR PRINCIPAL DEL CHAT -->
+<div class="chat-layout">
+    <!-- MENSAJES -->
+    <div class="chat-messages">
+        {% for turno in chat_history %}
+            <div class="chat-bubble bubble-user">
+                <div class="bubble-meta">Tú</div>
+                {{ turno.pregunta }}
+            </div>
+            <div class="chat-bubble bubble-assistant">
+                <div class="bubble-meta" style="color: var(--color-primary);">Asistente EPIIS</div>
+                <div style="white-space: pre-wrap;">{{ turno.respuesta }}</div>
+            </div>
+        {% endfor %}
+
+        {% if turno_actual %}
+            <div class="chat-bubble bubble-user">
+                <div class="bubble-meta">Tú</div>
+                {{ turno_actual.pregunta }}
+            </div>
+            <div class="chat-bubble bubble-assistant">
+                <div class="bubble-meta" style="color: var(--color-primary);">Asistente EPIIS</div>
+                
+                {% if auto_detected_doc %}
+                <div class="detection-badge">
+                    <i class="bi bi-magic"></i> Contexto: {{ auto_detected_doc }}
+                </div>
+                {% endif %}
+
+                <div style="white-space: pre-wrap; margin-top: 0.5rem;">{{ turno_actual.respuesta }}</div>
+
+                {% if turno_actual.fuentes %}
+                <div class="sources-inline">
+                    <div class="bubble-meta">Fuentes:</div>
+                    {% for src in turno_actual.fuentes %}
+                    <span class="source-tag" title="Confianza: {{ (src.score * 100)|round(0) }}%">
+                        <i class="bi bi-file-earmark-text"></i>
+                        {{ src.filename or 'Doc' }}
+                        <span style="
+                            display: inline-block;
+                            width: 40px;
+                            height: 4px;
+                            background: var(--color-border);
+                            border-radius: 2px;
+                            margin-left: 4px;
+                            vertical-align: middle;
+                            position: relative;
+                            overflow: hidden;
+                        ">
+                            <span style="
+                                position: absolute;
+                                left: 0; top: 0;
+                                height: 100%;
+                                width: {{ (src.score * 100)|round(0) }}%;
+                                background: {% if src.score > 0.7 %}var(--color-success){% elif src.score > 0.5 %}#f59e0b{% else %}var(--color-error){% endif %};
+                                border-radius: 2px;
+                            "></span>
+                        </span>
+                        <span style="font-size:0.65rem; opacity:0.7;">{{ (src.score * 100)|round(0) }}%</span>
+                    </span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {% if not chat_history and not turno_actual %}
+            <div style="text-align: center; padding: 3rem; color: var(--color-text-muted);">
+                <i class="bi bi-chat-dots" style="font-size: 3rem; display: block; margin-bottom: 1rem; opacity: 0.3;"></i>
+                <p>Inicia una conversación con el repositorio documental.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Botón flotante scroll-to-bottom -->
+    <button id="scroll-bottom-btn" onclick="scrollToBottom()" title="Ir al final">
+        <i class="bi bi-chevron-down"></i>
+    </button>
+
+    <!-- FORMULARIO -->
+    <div class="query-form-container">
+        <form action="{{ url_for('consultar') }}" method="POST" id="chat-form">
+            <input type="hidden" name="scope" value="{{ scope }}">
+            <input type="hidden" name="doc_id" value="{{ doc_seleccionado or '' }}">
+
+            <textarea id="pregunta" name="pregunta" rows="1" class="query-textarea"
+                placeholder="Escribe tu consulta..." required autofocus></textarea>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; margin: 0;">
+                <div style="display: flex; gap: 0.5rem;">
+                    <button type="submit" class="btn-submit">
+                        <i class="bi bi-send-fill"></i> Enviar
+                    </button>
+                    {% if chat_history or turno_actual %}
+                    <button type="submit" form="clear-form" class="btn-clear">
+                        <i class="bi bi-trash"></i> Nueva conversación
+                    </button>
+                    {% endif %}
+                </div>
+                <div style="font-size: 0.75rem; color: var(--color-text-muted); display: flex; align-items: center; gap: 0.3rem;">
+                    <i class="bi bi-shield-lock"></i> Procesado localmente
+                </div>
+            </div>
+        </form>
+
+        <form id="clear-form" action="{{ url_for('limpiar_historial') }}" method="POST" style="display: none;"></form>
+    </div>
+</div>
+
+<script>
+    console.log('[Debug] Script iniciado');
+    
+    let submitting = false;
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('[Debug] DOM cargado');
+        const pageBody = document.querySelector('.page-body');
+        const scrollBtn = document.getElementById('scroll-bottom-btn');
+        console.log('[Debug] pageBody:', pageBody);
+        console.log('[Debug] scrollBtn:', scrollBtn);
+    });
+    
+    document.getElementById('chat-form').addEventListener('submit', function(e) {
+        if (submitting) {
+            e.preventDefault();
+            return false;
+        }
+        
+        const pregunta = document.getElementById('pregunta').value.trim();
+        if (!pregunta) return;
+        
+        submitting = true;
+        
+        // Mostrar loader DESPUÉS de validar, sin deshabilitar el campo
+        document.getElementById('thinking-overlay').classList.add('active');
+        document.getElementById('thinking-label').textContent = 'El asistente está pensando...';
+        
+        // Deshabilitar botón pero NO el textarea
+        document.querySelector('.btn-submit').disabled = true;
+        
+        // El formulario se envía normalmente con los datos intactos
+    });
+
+    document.getElementById('pregunta').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            if (!submitting) {
+                document.getElementById('chat-form').requestSubmit();
+            }
+        }
+    });
+
+    // Prevenir que el navegador restaure la posición de scroll
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+
+    // Auto-scroll al último mensaje y botón scroll
+    const pageBody = document.querySelector('.page-body'); // El contenedor con scroll
+    
+    function scrollToBottom() {
+        if (pageBody) {
+            pageBody.scrollTo({ 
+                top: pageBody.scrollHeight, 
+                behavior: 'smooth' 
+            });
+        }
+    }
+    
+    // Scroll inicial al cargar - múltiples intentos
+    window.addEventListener('load', function() {
+        scrollToBottom();
+        setTimeout(scrollToBottom, 200);
+        setTimeout(scrollToBottom, 500);
+    });
+
+    // Botón flotante - mostrar/ocultar
+    const scrollBtn = document.getElementById('scroll-bottom-btn');
+    
+    function updateScrollButton() {
+        if (!pageBody || !scrollBtn) return;
+        
+        const scrolled = pageBody.scrollTop;
+        const maxScroll = pageBody.scrollHeight - pageBody.clientHeight;
+        const distanceFromBottom = maxScroll - scrolled;
+        
+        // Mostrar solo si scrolleamos hacia arriba y estamos lejos del fondo
+        // Umbral: más de 300px del fondo
+        if (scrolled > 150 && distanceFromBottom > 300) {
+            scrollBtn.classList.add('show');
+        } else {
+            scrollBtn.classList.remove('show');
+        }
+    }
+    
+    pageBody.addEventListener('scroll', updateScrollButton);
+    updateScrollButton(); // Check inicial
+</script>
+
+{% endblock %}
