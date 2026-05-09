@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EPIIS – {% block title %}Sistema Documental{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        :root {
+            /* Modo Claro - Variables Principales */
+            --color-primary: #1d4ed8;
+            --color-primary-hover: #1e40af;
+            --color-primary-light: #eff6ff;
+            --color-bg: #f8fafc;
+            --color-surface: #ffffff;
+            --color-surface-alt: #f1f5f9;
+            --color-border: #e2e8f0;
+            --color-border-light: #f1f5f9;
+            --color-success: #10b981;
+            --color-success-bg: #f0fdf4;
+            --color-success-border: #86efac;
+            --color-error: #ef4444;
+            --color-error-bg: #fef2f2;
+            --color-error-border: #fca5a5;
+            --color-warning: #f59e0b;
+            --color-warning-bg: #fef3c7;
+            --color-warning-border: #fcd34d;
+            --color-info: #0ea5e9;
+            --color-info-bg: #f0f9ff;
+            --color-info-border: #7dd3fc;
+            --color-text-main: #1e293b;
+            --color-text-secondary: #334155;
+            --color-text-muted: #64748b;
+            --color-text-inverse: #ffffff;
+            --color-sidebar-bg: #ffffff;
+            --color-sidebar-border: #e5e7eb;
+            --color-sidebar-hover: #f3f4f6;
+            --color-sidebar-active: #eff6ff;
+            --color-code-bg: #f8fafc;
+            --color-code-border: #e2e8f0;
+            --color-table-hover: #f8fafc;
+            --radius-lg: 12px;
+            --radius-md: 8px;
+            --radius-pill: 50px;
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --transition: all 0.2s ease;
+        }
+
+        /* Modo Oscuro - Variables Override */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --color-primary: #3b82f6;
+                --color-primary-hover: #2563eb;
+                --color-primary-light: #1e3a8a;
+                --color-bg: #0f172a;
+                --color-surface: #1e293b;
+                --color-surface-alt: #334155;
+                --color-border: #334155;
+                --color-border-light: #475569;
+                --color-success: #22c55e;
+                --color-success-bg: #052e16;
+                --color-success-border: #16a34a;
+                --color-error: #ef4444;
+                --color-error-bg: #450a0a;
+                --color-error-border: #dc2626;
+                --color-warning: #f59e0b;
+                --color-warning-bg: #451a03;
+                --color-warning-border: #d97706;
+                --color-info: #0ea5e9;
+                --color-info-bg: #072f4f;
+                --color-info-border: #0284c7;
+                --color-text-main: #f1f5f9;
+                --color-text-secondary: #e2e8f0;
+                --color-text-muted: #94a3b8;
+                --color-text-inverse: #0f172a;
+                --color-sidebar-bg: #1e293b;
+                --color-sidebar-border: #334155;
+                --color-sidebar-hover: #334155;
+                --color-sidebar-active: #1e3a8a;
+                --color-code-bg: #0f172a;
+                --color-code-border: #334155;
+                --color-table-hover: #334155;
+                --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+                --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+                --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        /* Theme Toggle Manual */
+        [data-theme="dark"] {
+            --color-primary: #3b82f6;
+            --color-primary-hover: #2563eb;
+            --color-primary-light: #1e3a8a;
+            --color-bg: #0f172a;
+            --color-surface: #1e293b;
+            --color-surface-alt: #334155;
+            --color-border: #334155;
+            --color-border-light: #475569;
+            --color-success: #22c55e;
+            --color-success-bg: #052e16;
+            --color-success-border: #16a34a;
+            --color-error: #ef4444;
+            --color-error-bg: #450a0a;
+            --color-error-border: #dc2626;
+            --color-warning: #f59e0b;
+            --color-warning-bg: #451a03;
+            --color-warning-border: #d97706;
+            --color-info: #0ea5e9;
+            --color-info-bg: #072f4f;
+            --color-info-border: #0284c7;
+            --color-text-main: #f1f5f9;
+            --color-text-secondary: #e2e8f0;
+            --color-text-muted: #94a3b8;
+            --color-text-inverse: #0f172a;
+            --color-sidebar-bg: #1e293b;
+            --color-sidebar-border: #334155;
+            --color-sidebar-hover: #334155;
+            --color-sidebar-active: #1e3a8a;
+            --color-code-bg: #0f172a;
+            --color-code-border: #334155;
+            --color-table-hover: #334155;
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ── RESET & BASE ─────────────────────────────── */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            background: var(--color-bg);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            color: var(--color-text-main);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── LAYOUT ───────────────────────────────────── */
+        .app-shell {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ── SIDEBAR ──────────────────────────────────── */
+        .sidebar {
+            width: 240px;
+            min-width: 240px;
+            height: 100vh;
+            background: var(--color-sidebar-bg);
+            border-right: 1px solid var(--color-sidebar-border);
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+            overflow: hidden;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .sidebar.collapsed {
+            width: 60px;
+            min-width: 60px;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.1rem 1rem 0.9rem;
+            border-bottom: 1px solid var(--color-sidebar-border);
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--color-primary);
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .sidebar-brand i {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand span {
+            transition: opacity 0.18s;
+        }
+
+        .sidebar.collapsed .sidebar-brand span {
+            opacity: 0;
+            width: 0;
+        }
+
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--color-text-muted);
+            padding: 4px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+
+        .sidebar-toggle:hover {
+            background: var(--color-sidebar-hover);
+            color: var(--color-text-main);
+        }
+
+        .sidebar-toggle i {
+            font-size: 1rem;
+        }
+
+        /* NAV LINKS */
+        .sidebar nav {
+            flex: 1;
+            padding: 0.5rem 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .sidebar nav a {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            padding: 0.55rem 1rem;
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            border-left: 3px solid transparent;
+            transition: var(--transition);
+        }
+
+        .sidebar nav a:hover {
+            background: var(--color-sidebar-hover);
+            color: var(--color-text-main);
+        }
+
+        .sidebar nav a.active {
+            background: var(--color-sidebar-active);
+            border-left-color: var(--color-primary);
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        .sidebar nav a i {
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .sidebar nav a span {
+            transition: opacity 0.15s;
+            overflow: hidden;
+        }
+
+        .sidebar.collapsed nav a span {
+            opacity: 0;
+            width: 0;
+        }
+
+        .sidebar.collapsed nav a {
+            justify-content: center;
+            padding: 0.55rem;
+        }
+
+        /* SIDEBAR FOOTER */
+        .sidebar-footer {
+            padding: 0.75rem 1rem;
+            border-top: 1px solid var(--color-sidebar-border);
+            flex-shrink: 0;
+        }
+
+        .sidebar-user {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            font-size: 0.82rem;
+            color: var(--color-text-secondary);
+            white-space: nowrap;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-user span {
+            transition: opacity 0.15s;
+        }
+
+        .sidebar.collapsed .sidebar-user span {
+            opacity: 0;
+            width: 0;
+        }
+
+        .sidebar-user i {
+            flex-shrink: 0;
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #dc2626;
+            text-decoration: none;
+            font-size: 0.82rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            white-space: nowrap;
+            width: 100%;
+        }
+
+        .logout-btn:hover {
+            color: #991b1b;
+        }
+
+        .logout-btn span {
+            transition: opacity 0.15s;
+        }
+
+        .sidebar.collapsed .logout-btn span,
+        .sidebar.collapsed .sidebar-user {
+            justify-content: center;
+        }
+
+.sidebar.collapsed .logout-btn span {
+    opacity: 0;
+    width: 0;
+}
+
+/* ── MAIN CONTENT ─────────────────────────────── */
+.main-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-width: 0;
+}
+
+.page-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1.5rem;
+    min-height: 0; /* crítico para que flex no desborde */
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+.topbar {
+    height: 60px;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    flex-shrink: 0;
+}
+
+.topbar-title h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-main);
+}
+
+.topbar-title small {
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    margin-top: 2px;
+}
+
+.topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.theme-toggle {
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 0.5rem;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-toggle:hover {
+    background: var(--color-surface-alt);
+    color: var(--color-text-main);
+    border-color: var(--color-border-light);
+}
+    #toast-container {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            max-width: 340px;
+        }
+
+        .toast {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: #fff;
+            border-radius: 10px;
+            padding: 1rem 3rem 1rem 1.25rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid #6b7280;
+            animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            font-size: 0.875rem;
+            min-width: 300px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .toast.success {
+            border-left-color: var(--color-success-border);
+            background: var(--color-success-bg);
+        }
+
+        .toast.error {
+            border-left-color: var(--color-error-border);
+            background: var(--color-error-bg);
+        }
+
+        .toast.warning {
+            border-left-color: var(--color-warning-border);
+            background: var(--color-warning-bg);
+        }
+
+        .toast.info {
+            border-left-color: var(--color-info-border);
+            background: var(--color-info-bg);
+        }
+
+        .toast-icon {
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .toast.success .toast-icon {
+            color: var(--color-success);
+        }
+
+        .toast.error .toast-icon {
+            color: var(--color-error);
+        }
+
+        .toast.warning .toast-icon {
+            color: var(--color-warning);
+        }
+
+        .toast.info .toast-icon {
+            color: var(--color-info);
+        }
+
+        .toast-body {
+            flex: 1;
+            color: var(--color-text-main);
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .toast-close {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: rgba(0, 0, 0, 0.03);
+            border: none;
+            cursor: pointer;
+            color: #9ca3af;
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+            border-radius: 6px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toast-close:hover {
+            background: rgba(0, 0, 0, 0.08);
+            color: #374151;
+            transform: scale(1.05);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(12px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* ── CONFIRM MODAL ────────────────────────────── */
+        #confirm-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.35);
+            z-index: 9998;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #confirm-overlay.open {
+            display: flex;
+        }
+
+        #confirm-card {
+            background: var(--color-surface);
+            border-radius: 12px;
+            padding: 1.75rem;
+            max-width: 380px;
+            width: 90%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--color-border);
+        }
+
+        #confirm-card h5 {
+            margin: 0 0 0.5rem;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-text-main);
+        }
+
+        #confirm-card p {
+            margin: 0 0 1.25rem;
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+        }
+
+        .confirm-actions {
+            display: flex;
+            gap: 0.6rem;
+            justify-content: flex-end;
+        }
+
+        .confirm-actions button {
+            padding: 0.45rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        #confirm-cancel {
+            background: var(--color-surface-alt);
+            color: var(--color-text-secondary);
+            border-color: var(--color-border);
+        }
+
+        #confirm-cancel:hover {
+            background: var(--color-border);
+        }
+
+        #confirm-ok {
+            background: var(--color-error);
+            color: #fff;
+        }
+
+        #confirm-ok:hover {
+            background: #b91c1c;
+        }
+
+        /* ── CARDS & UTILITIES ────────────────────────── */
+        .card {
+            background: var(--color-surface);
+            border-radius: 10px;
+            border: 1px solid var(--color-border);
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-icon {
+            font-size: 1.6rem;
+            color: var(--color-primary);
+            flex-shrink: 0;
+        }
+
+        .stat-label {
+            font-size: 0.78rem;
+            color: var(--color-text-muted);
+            display: block;
+            margin-bottom: 0.15rem;
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--color-text-main);
+            line-height: 1;
+        }
+
+        .source-card {
+            padding: 0.85rem 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            background: var(--color-surface);
+        }
+
+        .source-card .source-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.4rem;
+        }
+
+        .source-card .doc-name {
+            font-weight: 600;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: var(--color-text-main);
+        }
+
+        .score-badge {
+            background: var(--color-primary);
+            color: var(--color-text-inverse);
+            padding: 0.15rem 0.55rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+        }
+
+        .source-fragment {
+            color: var(--color-text-muted);
+            font-size: 0.82rem;
+            border-left: 3px solid var(--color-border);
+            padding-left: 0.75rem;
+            margin-top: 0.5rem;
+            line-height: 1.5;
+        }
+
+        /* ── LOADERS ──────────────────────────────────── */
+        #upload-loader {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            z-index: 9999;
+        }
+        .upload-bar {
+            width: 0;
+            height: 4px;
+            background: #2563EB;
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.6);
+            animation: animFw 8s linear forwards;
+            position: relative;
+        }
+        .upload-bar::after,
+        .upload-bar::before {
+            content: '';
+            width: 10px;
+            height: 1px;
+            background: #2563EB;
+            position: absolute;
+            top: 9px;
+            right: -2px;
+            opacity: 0;
+            transform: rotate(-45deg) translateX(0px);
+            animation: coli1 0.3s linear infinite;
+        }
+        .upload-bar::before {
+            top: -4px;
+            transform: rotate(45deg);
+            animation: coli2 0.3s linear infinite;
+        }
+        @keyframes animFw {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+        @keyframes coli1 {
+            0% { transform: rotate(-45deg) translateX(0px); opacity: 0.7; }
+            100% { transform: rotate(-45deg) translateX(-45px); opacity: 0; }
+        }
+        @keyframes coli2 {
+            0% { transform: rotate(45deg) translateX(0px); opacity: 1; }
+            100% { transform: rotate(45deg) translateX(-45px); opacity: 0.7; }
+        }
+
+        #thinking-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.15);
+            z-index: 9998;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        #thinking-overlay.active {
+            display: flex;
+        }
+        .thinking-spinner {
+            transform: rotateZ(45deg);
+            perspective: 1000px;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            color: #2563EB;
+            position: relative;
+        }
+        .thinking-spinner:before,
+        .thinking-spinner:after {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 0; left: 0;
+            width: inherit;
+            height: inherit;
+            border-radius: 50%;
+            transform: rotateX(70deg);
+            animation: 1s spin linear infinite;
+        }
+        .thinking-spinner:after {
+            color: #1D4ED8;
+            transform: rotateY(70deg);
+            animation-delay: .4s;
+        }
+        .thinking-label {
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 0.9rem;
+            background: white;
+            padding: 0.5rem 1.25rem;
+            border-radius: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        @keyframes spin {
+            0%, 100% { box-shadow: .2em 0px 0 0px currentcolor; }
+            12% { box-shadow: .2em .2em 0 0 currentcolor; }
+            25% { box-shadow: 0 .2em 0 0px currentcolor; }
+            37% { box-shadow: -.2em .2em 0 0 currentcolor; }
+            50% { box-shadow: -.2em 0 0 0 currentcolor; }
+            62% { box-shadow: -.2em -.2em 0 0 currentcolor; }
+            75% { box-shadow: 0px -.2em 0 0 currentcolor; }
+            87% { box-shadow: .2em -.2em 0 0 currentcolor; }
+        }
+
+        /* ── RAG RESPONSE MARKDOWN STYLES ─────────────────────────────── */
+        .rag-response {
+            line-height: 1.6;
+        }
+
+        .rag-response h1, .rag-response h2, .rag-response h3,
+        .rag-response h4, .rag-response h5, .rag-response h6 {
+            margin: 1rem 0 0.5rem 0;
+            font-weight: 600;
+            color: var(--color-text-main);
+        }
+
+        .rag-response h1 { font-size: 1.4rem; }
+        .rag-response h2 { font-size: 1.25rem; }
+        .rag-response h3 { font-size: 1.1rem; border-bottom: 1px solid var(--color-border); padding-bottom: 0.25rem; }
+        .rag-response h4 { font-size: 1rem; color: var(--color-text-muted); }
+        .rag-response h5 { font-size: 0.9rem; }
+        .rag-response h6 { font-size: 0.85rem; font-weight: 500; }
+
+        .rag-response p {
+            margin: 0.5rem 0;
+        }
+
+        .rag-response ul, .rag-response ol {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .rag-response li {
+            margin: 0.25rem 0;
+        }
+
+        .rag-response strong, .rag-response b {
+            font-weight: 600;
+            color: var(--color-text-main);
+        }
+
+        .rag-response em, .rag-response i {
+            font-style: italic;
+        }
+
+        .rag-response code {
+            background-color: #f3f4f6;
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 0.875rem;
+        }
+
+        .rag-response pre {
+            background-color: #f3f4f6;
+            padding: 0.75rem;
+            border-radius: var(--radius-md);
+            overflow-x: auto;
+            margin: 0.5rem 0;
+        }
+
+        .rag-response pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .rag-response blockquote {
+            border-left: 3px solid var(--color-border);
+            padding-left: 1rem;
+            margin: 0.5rem 0;
+            color: var(--color-text-muted);
+            font-style: italic;
+        }
+
+        .rag-response a {
+            color: var(--color-primary);
+            text-decoration: underline;
+        }
+
+        .rag-response a:hover {
+            color: var(--color-primary-hover);
+        }
+
+        .rag-response hr {
+            border: none;
+            border-top: 1px solid var(--color-border);
+            margin: 1rem 0;
+        }
+
+        .rag-response table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0.5rem 0;
+        }
+
+        .rag-response th, .rag-response td {
+            border: 1px solid var(--color-border);
+            padding: 0.5rem;
+            text-align: left;
+        }
+
+        .rag-response th {
+            background-color: var(--color-bg);
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="upload-loader">
+        <div class="upload-bar"></div>
+    </div>
+    <div id="thinking-overlay">
+        <div class="thinking-spinner"></div>
+        <div class="thinking-label" id="thinking-label">Procesando...</div>
+    </div>
+
+    {% if session.get('user_id') %}
+
+    <!-- ── TOAST CONTAINER ── -->
+    <div id="toast-container"></div>
+
+    <!-- ── CONFIRM MODAL ── -->
+    <div id="confirm-overlay">
+        <div id="confirm-card">
+            <h5 id="confirm-title">Confirmar acción</h5>
+            <p id="confirm-message">¿Estás seguro de que deseas continuar?</p>
+            <div class="confirm-actions">
+                <button id="confirm-cancel" onclick="closeConfirm()">Cancelar</button>
+                <button id="confirm-ok">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-shell">
+        <!-- ── SIDEBAR ── -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-brand">
+                    <i class="bi bi-buildings"></i>
+                    <span>EPIIS</span>
+                </div>
+                <button class="sidebar-toggle" id="sidebar-toggle" title="Colapsar menú">
+                    <i class="bi bi-layout-sidebar-reverse" id="toggle-icon"></i>
+                </button>
+            </div>
+
+            <nav>
+                <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.endpoint == 'dashboard' else '' }}">
+                    <i class="bi bi-speedometer2"></i><span>Dashboard</span>
+                </a>
+                <a href="{{ url_for('consultar') }}" class="{{ 'active' if request.endpoint == 'consultar' else '' }}">
+                    <i class="bi bi-search"></i><span>Consultar</span>
+                </a>
+                <a href="{{ url_for('generar') }}" class="{{ 'active' if request.endpoint == 'generar' else '' }}">
+                    <i class="bi bi-stars"></i><span>Generar</span>
+                </a>
+                <a href="{{ url_for('documentos') }}"
+                    class="{{ 'active' if request.endpoint == 'documentos' else '' }}">
+                    <i class="bi bi-folder2-open"></i><span>Documentos</span>
+                </a>
+                <a href="{{ url_for('web_sources') }}" class="{{ 'active' if request.endpoint == 'web_sources' else '' }}">
+                    <i class="bi bi-globe2"></i><span>Web</span>
+                </a>
+                <a href="{{ url_for('academico') }}" class="{{ 'active' if request.endpoint == 'academico' else '' }}">
+                    <i class="bi bi-mortarboard"></i><span>Académico</span>
+                </a>
+                <a href="{{ url_for('historial') }}" class="{{ 'active' if request.endpoint == 'historial' else '' }}">
+                    <i class="bi bi-clock-history"></i><span>Historial</span>
+                </a>
+                {% if session.get('user_role') == 'admin' %}
+                <a href="{{ url_for('admin_usuarios') }}" class="{{ 'active' if request.endpoint == 'admin_usuarios' else '' }}">
+                    <i class="bi bi-people"></i><span>Usuarios</span>
+                </a>
+                {% endif %}
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <i class="bi bi-person-circle"></i>
+                    <span>{{ session.get('username') }}</span>
+                </div>
+                <button class="logout-btn"
+                    onclick="confirmAction(&quot;¿Cerrar sesión?&quot;, &quot;¿Deseas salir del sistema?&quot;, function(){ window.location = &quot;{{ url_for('logout') }}&quot;; })">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Salir</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- ── MAIN CONTENT ── -->
+        <div class="main-area">
+            <div class="topbar">
+                <div class="topbar-title">
+                    <h4>{% block page_title %}{% endblock %}</h4>
+                    <small>{% block page_subtitle %}{% endblock %}</small>
+                </div>
+                <div class="topbar-actions">
+                    <button id="theme-toggle" class="theme-toggle" title="Cambiar tema">
+                        <i class="bi bi-moon"></i>
+                    </button>
+                    <div class="topbar-user">
+                        <i class="bi bi-person-circle"></i>
+                        {{ session.get('username') }}
+                    </div>
+                </div>
+            </div>
+            <div class="page-body">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <!-- ── FLASK FLASH → TOAST ── -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            {% for category, message in messages %}
+            showToast({{ message | tojson }}, {{ category | tojson }});
+            {% endfor %}
+        });
+    </script>
+    {% endif %}
+    {% endwith %}
+
+    {% else %}
+    <!-- LOGIN LAYOUT (no sidebar) -->
+    <main style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:1rem;">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div id="toast-container"></div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                {% for category, message in messages %}
+                showToast({{ message | tojson }}, {{ category | tojson }});
+                {% endfor %}
+            });
+        </script>
+        {% endif %}
+        {% endwith %}
+        {% block content_public %}{% endblock %}
+    </main>
+    {% endif %}
+
+    <!-- ── JS GLOBAL ── -->
+    <script>
+        // ── TOAST ──────────────────────────────────────
+        const TOAST_ICONS = {
+            success: 'bi-check-circle',
+            error: 'bi-exclamation-triangle',
+            warning: 'bi-exclamation-circle',
+            info: 'bi-info-circle',
+        };
+        function showToast(message, type = 'info', duration = 4000) {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+        <i class="bi ${TOAST_ICONS[type] || 'bi-info-circle'} toast-icon"></i>
+        <span class="toast-body">${message}</span>
+        <button class="toast-close" onclick="this.parentElement.remove()"><i class="bi bi-x"></i></button>
+    `;
+            container.appendChild(toast);
+            if (duration > 0) setTimeout(() => toast.remove(), duration);
+        }
+
+        // ── CONFIRM MODAL ──────────────────────────────
+        let _confirmCallback = null;
+        function confirmAction(title, message, callback) {
+            document.getElementById('confirm-title').textContent = title || 'Confirmar';
+            document.getElementById('confirm-message').textContent = message || '';
+            _confirmCallback = callback;
+            document.getElementById('confirm-overlay').classList.add('open');
+        }
+        function closeConfirm() {
+            document.getElementById('confirm-overlay').classList.remove('open');
+            _confirmCallback = null;
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('confirm-ok')?.addEventListener('click', function () {
+                if (_confirmCallback) _confirmCallback();
+                closeConfirm();
+            });
+            document.getElementById('confirm-overlay')?.addEventListener('click', function (e) {
+                if (e.target === this) closeConfirm();
+            });
+        });
+
+        // ── THEME MANAGEMENT ─────────────────────────────
+        function initTheme() {
+            // Detectar preferencia del sistema o usar guardado
+            const savedTheme = localStorage.getItem('theme');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            const theme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+            applyTheme(theme);
+        }
+
+        function applyTheme(theme) {
+            const root = document.documentElement;
+            if (theme === 'dark') {
+                root.setAttribute('data-theme', 'dark');
+            } else {
+                root.removeAttribute('data-theme');
+            }
+            localStorage.setItem('theme', theme);
+            
+            // Actualizar botón de toggle
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) {
+                const icon = themeToggle.querySelector('i');
+                if (icon) {
+                    icon.className = theme === 'dark' ? 'bi bi-sun' : 'bi bi-moon';
+                }
+            }
+        }
+
+        function toggleTheme() {
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            applyTheme(newTheme);
+        }
+
+        // ── SIDEBAR TOGGLE ─────────────────────────────
+        document.addEventListener('DOMContentLoaded', function () {
+            // Inicializar tema
+            initTheme();
+            
+            // Configurar toggle de tema
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', toggleTheme);
+            }
+            
+            // Escuchar cambios en preferencia del sistema
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (!localStorage.getItem('theme')) {
+                    applyTheme(e.matches ? 'dark' : 'light');
+                }
+            });
+            
+            const sidebar = document.getElementById('sidebar');
+            const btn = document.getElementById('sidebar-toggle');
+            const icon = document.getElementById('toggle-icon');
+            if (!sidebar || !btn) return;
+
+            const saved = localStorage.getItem('sidebar-collapsed') === 'true';
+            if (saved) {
+                sidebar.classList.add('collapsed');
+                icon.className = 'bi bi-layout-sidebar';
+            }
+
+            btn.addEventListener('click', function () {
+                const collapsed = sidebar.classList.toggle('collapsed');
+                icon.className = collapsed ? 'bi bi-layout-sidebar' : 'bi bi-layout-sidebar-reverse';
+                localStorage.setItem('sidebar-collapsed', collapsed);
+            });
+        });
+    </script>
+</body>
+
+</html>

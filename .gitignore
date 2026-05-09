@@ -1,0 +1,36 @@
+# Entornos virtuales
+venv/
+.venv/
+
+# Archivos temporales de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Variables de entorno y archivos sensibles
+.env
+
+# Resultados de pruebas y cobertura
+.coverage
+.pytest_cache/
+tests/coverage_html/
+
+# Datos generados o cargados por el sistema
+data/uploads/*
+data/processed/*
+data/generated/*
+data/vectorstore/*
+data/web_cache/*
+
+# Mantener carpetas vacías si existen .gitkeep
+!data/uploads/.gitkeep
+!data/processed/.gitkeep
+!data/generated/.gitkeep
+!data/vectorstore/.gitkeep
+!data/web_cache/.gitkeep
+
+# Logs
+*.log
+
+
